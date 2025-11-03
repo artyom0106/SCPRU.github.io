@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCP Foundation - Секретный архив</title>
+    <style>
+        :root {
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --text-color: #c0c0c0;
+            --accent-color: #990000;
+            --border-color: #333333;
+            --access-1: #006600;
+            --access-2: #666600;
+            --access-3: #990000;
+            --access-4: #660099;
+            --access-5: #000066;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(50, 50, 50, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(50, 50, 50, 0.1) 0%, transparent 50%);
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            border: 1px solid var(--border-color);
+            background-color: var(--darker-bg);
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            color: var(--accent-color);
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #999;
+        }
+        
+        .login-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            background-color: rgba(20, 20, 20, 0.7);
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input[type="password"] {
+            padding: 10px;
+            background-color: #111;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #cc0000;
+        }
+        
+        .access-level {
+            margin: 20px 0;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .access-1 { background-color: var(--access-1); }
+        .access-2 { background-color: var(--access-2); }
+        .access-3 { background-color: var(--access-3); }
+        .access-4 { background-color: var(--access-4); }
+        .access-5 { background-color: var(--access-5); }
+        
+        .content-section {
+            display: none;
+            margin-top: 30px;
+        }
+        
+        .empty-archive {
+            text-align: center;
+            padding: 40px;
+            border: 1px dashed var(--border-color);
+            margin: 20px 0;
+            color: #666;
+        }
+        
+        .scp-item {
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            background-color: rgba(15, 15, 15, 0.8);
+        }
+        
+        .scp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .scp-id {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--accent-color);
+        }
+        
+        .scp-class {
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+        
+        .safe { background-color: #006600; }
+        .euclid { background-color: #996600; }
+        .keter { background-color: #990000; }
+        .thaumiel { background-color: #000066; }
+        .neutralized { background-color: #666666; }
+        
+        .scp-content {
+            line-height: 1.8;
+        }
+        
+        .redacted {
+            background-color: black;
+            color: black;
+            padding: 0 5px;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+        
+        .admin-panel {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            background-color: rgba(20, 20, 20, 0.9);
+        }
+        
+        .admin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        textarea {
+            padding: 10px;
+            background-color: #111;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-size: 1rem;
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        select, input[type="text"] {
+            padding: 10px;
+            background-color: #111;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+        
+        .delete-btn {
+            background-color: #333;
+            margin-top: 10px;
+        }
+        
+        .delete-btn:hover {
+            background-color: #660000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SCP Foundation</h1>
+            <div class="subtitle">Обезопасить. Удержать. Сохранить.</div>
+        </header>
+        
+        <div class="login-section">
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="password">Введите кодовую фразу доступа:</label>
+                    <input type="password" id="password" placeholder="●●●●●●●●●●">
+                </div>
+                <button id="login-btn">Получить доступ</button>
+            </div>
+        </div>
+        
+        <div id="access-level" class="access-level"></div>
+        
+        <div id="content" class="content-section">
+            <h2>Архив SCP объектов</h2>
+            
+            <div id="scp-list">
+                <!-- SCP объекты будут добавляться здесь -->
+                <div class="empty-archive">
+                    <p>Архив пуст. Используйте панель администратора для добавления SCP объектов.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="admin-panel" class="admin-panel">
+            <h2>Панель администратора</h2>
+            <div class="admin-form">
+                <div class="form-group">
+                    <label for="scp-id">ID SCP объекта:</label>
+                    <input type="text" id="scp-id" placeholder="SCP-XXX">
+                </div>
+                <div class="form-group">
+                    <label for="scp-class">Класс объекта:</label>
+                    <select id="scp-class">
+                        <option value="safe">Безопасный</option>
+                        <option value="euclid">Евклид</option>
+                        <option value="keter">Кетер</option>
+                        <option value="thaumiel">Таумиэль</option>
+                        <option value="neutralized">Нейтрализованный</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="scp-access">Уровень доступа:</label>
+                    <select id="scp-access">
+                        <option value="1">Уровень 1</option>
+                        <option value="2">Уровень 2</option>
+                        <option value="3">Уровень 3</option>
+                        <option value="4">Уровень 4</option>
+                        <option value="5">Уровень 5</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="scp-content">Описание объекта:</label>
+                    <textarea id="scp-content" placeholder="Введите описание SCP объекта..."></textarea>
+                </div>
+                <button id="add-scp-btn">Добавить SCP объект</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© SCP Foundation. Все права защищены.</p>
+            <p>Несакционированный доступ ведёт к дальнейшей нейтрализации субъекта</p>
+        </div>
+    </div>
+
+    <script>
+        // Пароли и соответствующие уровни доступа
+        const passwords = {
+            "level1": 1,
+            "level2": 2,
+            "level3": 3,
+            "level4": 4,
+            "level5": 5,
+            "admin": "admin" // Специальный пароль для администратора
+        };
+        
+        // Элементы DOM
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('login-btn');
+        const accessLevelDiv = document.getElementById('access-level');
+        const contentSection = document.getElementById('content');
+        const scpList = document.getElementById('scp-list');
+        const adminPanel = document.getElementById('admin-panel');
+        const addScpBtn = document.getElementById('add-scp-btn');
+        
+        // Текущий уровень доступа
+        let currentAccessLevel = 0;
+        
+        // Хранилище SCP объектов
+        let scpObjects = [];
+        
+        // Обработчик входа
+        loginBtn.addEventListener('click', function() {
+            const password = passwordInput.value.trim();
+            
+            if (password in passwords) {
+                const accessLevel = passwords[password];
+                
+                if (accessLevel === "admin") {
+                    // Административный доступ
+                    accessLevelDiv.textContent = "Уровень доступа: АДМИНИСТРАТОР";
+                    accessLevelDiv.className = "access-level access-5";
+                    accessLevelDiv.style.display = "block";
+                    contentSection.style.display = "block";
+                    adminPanel.style.display = "block";
+                    showAllContent();
+                } else {
+                    // Обычный доступ
+                    currentAccessLevel = accessLevel;
+                    accessLevelDiv.textContent = `Уровень доступа: ${accessLevel}`;
+                    accessLevelDiv.className = `access-level access-${accessLevel}`;
+                    accessLevelDiv.style.display = "block";
+                    contentSection.style.display = "block";
+                    adminPanel.style.display = "none";
+                    updateContentVisibility();
+                }
+                
+                passwordInput.value = "";
+            } else {
+                alert("Неверная кодовая фраза. Доступ запрещен.");
+                passwordInput.value = "";
+            }
+        });
+        
+        // Функция обновления видимости контента в зависимости от уровня доступа
+        function updateContentVisibility() {
+            const scpItems = document.querySelectorAll('.scp-item');
+            
+            if (scpItems.length === 0) {
+                scpList.innerHTML = '<div class="empty-archive"><p>Архив пуст. Используйте панель администратора для добавления SCP объектов.</p></div>';
+                return;
+            }
+            
+            scpItems.forEach(item => {
+                const itemAccessLevel = parseInt(item.getAttribute('data-access'));
+                
+                if (itemAccessLevel <= currentAccessLevel) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        }
+        
+        // Показать весь контент (для администратора)
+        function showAllContent() {
+            const scpItems = document.querySelectorAll('.scp-item');
+            if (scpItems.length === 0) {
+                scpList.innerHTML = '<div class="empty-archive"><p>Архив пуст. Используйте панель администратора для добавления SCP объектов.</p></div>';
+            } else {
+                scpItems.forEach(item => {
+                    item.style.display = "block";
+                });
+            }
+        }
+        
+        // Обработчик добавления нового SCP объекта
+        addScpBtn.addEventListener('click', function() {
+            const scpId = document.getElementById('scp-id').value.trim();
+            const scpClass = document.getElementById('scp-class').value;
+            const scpAccess = document.getElementById('scp-access').value;
+            const scpContent = document.getElementById('scp-content').value.trim();
+            
+            if (!scpId || !scpContent) {
+                alert("Пожалуйста, заполните все поля.");
+                return;
+            }
+            
+            // Создание нового объекта SCP
+            const newScp = {
+                id: scpId,
+                class: scpClass,
+                access: scpAccess,
+                content: scpContent
+            };
+            
+            // Добавление в хранилище
+            scpObjects.push(newScp);
+            
+            // Создание нового элемента SCP
+            const newScpItem = document.createElement('div');
+            newScpItem.className = 'scp-item';
+            newScpItem.setAttribute('data-access', scpAccess);
+            newScpItem.setAttribute('data-id', scpId);
+            
+            // Определение класса для отображения
+            let classDisplay = "";
+            let classValue = "";
+            if (scpClass === "safe") {
+                classDisplay = "Безопасный";
+                classValue = "safe";
+            } else if (scpClass === "euclid") {
+                classDisplay = "Евклид";
+                classValue = "euclid";
+            } else if (scpClass === "keter") {
+                classDisplay = "Кетер";
+                classValue = "keter";
+            } else if (scpClass === "thaumiel") {
+                classDisplay = "Таумиэль";
+                classValue = "thaumiel";
+            } else if (scpClass === "neutralized") {
+                classDisplay = "Нейтрализованный";
+                classValue = "neutralized";
+            }
+            
+            newScpItem.innerHTML = `
+                <div class="scp-header">
+                    <div class="scp-id">${scpId}</div>
+                    <div class="scp-class ${classValue}">${classDisplay}</div>
+                </div>
+                <div class="scp-content">
+                    ${scpContent.replace(/\n/g, '</p><p>')}
+                </div>
+                <button class="delete-btn" data-id="${scpId}">Удалить объект</button>
+            `;
+            
+            // Удаляем сообщение о пустом архиве, если оно есть
+            const emptyArchive = scpList.querySelector('.empty-archive');
+            if (emptyArchive) {
+                emptyArchive.remove();
+            }
+            
+            // Добавление нового элемента в список
+            scpList.appendChild(newScpItem);
+            
+            // Добавляем обработчик для кнопки удаления
+            const deleteBtn = newScpItem.querySelector('.delete-btn');
+            deleteBtn.addEventListener('click', function() {
+                const scpId = this.getAttribute('data-id');
+                deleteScpObject(scpId);
+            });
+            
+            // Очистка формы
+            document.getElementById('scp-id').value = "";
+            document.getElementById('scp-content').value = "";
+            
+            alert("SCP объект успешно добавлен!");
+        });
+        
+        // Функция удаления SCP объекта
+        function deleteScpObject(scpId) {
+            if (confirm(`Вы уверены, что хотите удалить объект ${scpId}?`)) {
+                // Удаляем из хранилища
+                scpObjects = scpObjects.filter(obj => obj.id !== scpId);
+                
+                // Удаляем из DOM
+                const scpItem = document.querySelector(`.scp-item[data-id="${scpId}"]`);
+                if (scpItem) {
+                    scpItem.remove();
+                }
+                
+                // Если объектов больше нет, показываем сообщение о пустом архиве
+                if (scpObjects.length === 0) {
+                    scpList.innerHTML = '<div class="empty-archive"><p>Архив пуст. Используйте панель администратора для добавления SCP объектов.</p></div>';
+                }
+                
+                alert(`Объект ${scpId} удален из архива.`);
+            }
+        }
+        
+        // Добавляем обработчик для клавиши Enter в поле пароля
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loginBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
